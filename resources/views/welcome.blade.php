@@ -14,16 +14,37 @@
 <body class="bg-[#0f172a] text-slate-200 antialiased font-sans">
 
     <nav class="fixed w-full z-50 glass px-6 md:px-20 py-4 flex justify-between items-center">
-        <a href="/">
-            <img src="{{ asset('assets/LOGO_MANTAPS.png') }}" alt="MantaPS Logo" class="h-8 md:h-10">
-        </a>
+    <a href="/">
+        <img src="{{ asset('assets/LOGO_MANTAPS.png') }}" alt="MantaPS Logo" class="h-8 md:h-10">
+    </a>
+
         <div class="hidden md:flex space-x-8 text-[10px] font-black uppercase tracking-widest">
-            <a href="#home" class="hover:text-blue-400">Beranda</a>
-            <a href="#paket" class="hover:text-blue-400">Harga</a>
-            <a href="#catalogue" class="hover:text-blue-400">Katalog Game</a>
-        </div>
-        <a href="#booking" class="bg-blue-600 px-6 py-2 rounded-full font-black text-[10px] uppercase shadow-lg shadow-blue-600/30 transition-all hover:scale-105">Booking Now</a>
-    </nav>
+        <a href="#home" class="hover:text-blue-400">Beranda</a>
+        <a href="#paket" class="hover:text-blue-400">Harga</a>
+        <a href="#catalogue" class="hover:text-blue-400">Katalog Game</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+        @if (Route::has('login'))
+            @auth
+                {{-- Jika sudah login, tampilkan Dashboard & Logout --}}
+                <span class="text-[10px] font-black uppercase text-slate-400">Halo, {{ Auth::user()->name }}</span>
+                <a href="{{ url('/dashboard') }}" class="text-[10px] font-black uppercase tracking-widest text-blue-400 hover:text-white transition">Dashboard</a>
+                
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-400 transition">Logout</button>
+                </form>
+            @else
+                {{-- Jika belum login --}}
+                <a href="{{ route('login') }}" class="text-[10px] font-black uppercase tracking-widest hover:text-blue-400 transition">Log in</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="bg-white/10 border border-white/20 px-5 py-2 rounded-full font-black text-[10px] uppercase transition-all hover:bg-white/20">Register</a>
+                @endif
+            @endauth
+        @endif
+    </div>
+</nav>
 
     <section id="home" class="relative pt-40 pb-20 px-6 text-center overflow-hidden">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-500/10 blur-[120px] rounded-full -z-10"></div>
@@ -69,18 +90,19 @@
             <a href="/catalogue" class="text-blue-400 font-black text-[10px] uppercase hover:underline">Lihat Semua &rarr;</a>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-            @forelse($featuredGames as $game)
-            <div class="group">
-                <div class="aspect-[3/4] rounded-2xl overflow-hidden mb-3 shadow-xl border border-white/5">
-                    <img src="{{ asset('storage/' . $game->cover_image) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                </div>
-                <h4 class="text-[10px] font-black truncate uppercase text-center tracking-widest text-slate-400">{{ $game->title }}</h4>
-            </div>
-            @empty
-                <p class="col-span-full text-center text-slate-500 italic">Katalog game sedang dipersiapkan...</p>
-            @endforelse
+ <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+    @forelse($featuredGames as $game)
+    <div class="group">
+        <div class="aspect-[3/4] rounded-2xl overflow-hidden mb-3 shadow-xl border border-white/5">
+            {{-- Gunakan asset('storage/...') untuk memanggil gambar yang diupload --}}
+            <img src="{{ asset('storage/' . $game->cover_image) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
         </div>
+        <h4 class="text-[10px] font-black truncate uppercase text-center tracking-widest text-slate-400">{{ $game->title }}</h4>
+    </div>
+    @empty
+        <p class="col-span-full text-center text-slate-500 italic">Katalog game sedang dipersiapkan...</p>
+    @endforelse
+</div>
     </section>
 
     <section id="booking" class="py-24 px-6 bg-slate-900">
@@ -110,7 +132,7 @@
         function sendWA() {
             const name = document.getElementById('wa_name').value;
             const pack = document.getElementById('wa_package').value;
-            const waNum = "628123456789"; // Ganti nomor Anda
+            const waNum = "6281237063538"; // Ganti nomor Anda
             if(!name) return alert('Nama wajib diisi!');
             const msg = encodeURIComponent(`Halo MantaPS! Saya ${name} mau booking sewa PS5 paket ${pack}. Apakah slot tersedia?`);
             window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');

@@ -1,12 +1,28 @@
 <?php
-use App\Http\Controllers\GameController;
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RentalController;
+use App\Http\Controllers\GameController; 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [GameController::class, 'index']);
-Route::get('/catalogue', [GameController::class, 'fullCatalogue']);
+// Halaman Utama (Landing Page)
+Route::get('/', [GameController::class, 'index'])->name('landing');
 
-Route::prefix('mantaps-workspace-admin')->group(function () {
-    Route::get('/games', [GameController::class, 'adminIndex'])->name('admin.index');
-    Route::post('/games', [GameController::class, 'store'])->name('admin.store');
-    Route::delete('/games/{game}', [GameController::class, 'destroy'])->name('admin.destroy');
+// Grup Rute yang memerlukan Login (Auth)
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // Dashboard Utama (Sekarang dikelola oleh GameController agar bisa tampil list game)
+    Route::get('/dashboard', [GameController::class, 'adminIndex'])->name('dashboard');
+
+    // Manajemen Game (Tambah & Hapus)
+    Route::get('/games/create', [GameController::class, 'create'])->name('game.create');
+    Route::post('/games', [GameController::class, 'store'])->name('game.store');
+    Route::delete('/games/{game}', [GameController::class, 'destroy'])->name('game.destroy');
+
+    // Manajemen Profil User (Bawaan Breeze)
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+require __DIR__.'/auth.php';
