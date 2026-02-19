@@ -1,15 +1,17 @@
-<nav x-data="{ open: false }" class="glass border-b border-white/10 bg-slate-900/50 sticky top-0 z-50">
+<nav x-data="{ open: false }" class="bg-[#0f172a] border-b border-white/5 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between h-20">
             <div class="flex items-center gap-8">
-                <a href="/" class="flex items-center gap-2 group">
-                    <i class="fas fa-arrow-left text-xs text-slate-500 group-hover:text-blue-400 transition"></i>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition">Lihat Website</span>
+                <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+                    <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-600 transition-all shadow-lg">
+                        <i class="fas fa-home text-[10px] text-slate-400 group-hover:text-white"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-white transition">Lihat Website</span>
                 </a>
 
-                <div class="hidden space-x-8 sm:-my-px sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:flex border-l border-white/10 pl-8">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-[10px] font-black uppercase tracking-widest !text-blue-500 border-blue-500">
-                        {{ __('Dashboard') }}
+                        {{ __('Inventory Admin') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -17,27 +19,18 @@
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-[10px] font-black uppercase tracking-widest rounded-md text-slate-400 bg-transparent hover:text-white focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-4 py-2 border border-white/5 text-[10px] font-black uppercase tracking-widest rounded-xl text-slate-400 bg-white/5 hover:text-white transition">
                             <div>{{ Auth::user()->name }}</div>
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
+                            <div class="ms-2 italic text-blue-500 opacity-50">#Pemilik</div>
                         </button>
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')" class="text-[10px] font-bold uppercase">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
+                        <x-dropdown-link :href="route('profile.edit')" class="text-[10px] font-bold uppercase">Profile</x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault(); this.closest('form').submit();"
-                                    class="text-[10px] font-bold uppercase text-red-500">
-                                {{ __('Log Out') }}
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-[10px] font-bold uppercase text-red-500">
+                                Keluar
                             </x-dropdown-link>
                         </form>
                     </x-slot>
